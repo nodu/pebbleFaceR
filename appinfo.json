@@ -1,0 +1,25 @@
+{
+    "appKeys": {},
+    "capabilities": [
+        "health"
+    ],
+    "companyName": "86it",
+    "enableMultiJS": false,
+    "longName": "R",
+    "projectType": "native",
+    "resources": {
+        "media": []
+    },
+    "sdkVersion": "3",
+    "shortName": "R",
+    "targetPlatforms": [
+        "aplite",
+        "basalt",
+        "chalk"
+    ],
+    "uuid": "6c4ee50d-7988-4f00-a65b-99aae06bd9cf",
+    "versionLabel": "1.0",
+    "watchapp": {
+        "watchface": true
+    }
+}
