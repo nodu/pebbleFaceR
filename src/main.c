@@ -35,8 +35,6 @@ static void update_time() {
   HealthServiceAccessibilityMask mask = health_service_metric_accessible(metric, 
     start, end);
 
-
-  
   if(mask & HealthServiceAccessibilityMaskAvailable) {
     // Data is available!
 
@@ -53,7 +51,7 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
 }
 
 static void canvas_update_proc(Layer *layer, GContext *ctx) {
-//   Custom drawing happens here!
+  // Custom drawing happens here!
   GRect bounds = layer_get_bounds(layer);
   GPoint center = GPoint(bounds.size.w / 2, bounds.size.h / 2);
   uint16_t radius = 60;
@@ -72,12 +70,6 @@ static void main_window_load(Window *window) {
   GRect bounds = layer_get_bounds(root_layer);
 
   window_set_background_color(window, GColorBlack);
-  
-//   s_bitmap_layer = bitmap_layer_create(bounds);
-//   s_background_layer = layer_create(bounds);
-//   layer_set_background_color(s_background_layer, GColorBlack);
-//   layer_add_child(root_layer, s_background_layer);
-  
    
   // Create canvas layer
   s_canvas_layer = layer_create(bounds);
@@ -85,7 +77,6 @@ static void main_window_load(Window *window) {
   layer_set_update_proc(s_canvas_layer, canvas_update_proc);
   // Add to Window
   layer_add_child(window_get_root_layer(window), s_canvas_layer);
-  
   
   // Create date TextLayer
   s_date_layer = text_layer_create(GRect(0, PBL_IF_ROUND_ELSE(45, 90), bounds.size.w, 21));
