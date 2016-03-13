@@ -37,7 +37,6 @@ static void update_time() {
 
   if(mask & HealthServiceAccessibilityMaskAvailable) {
     // Data is available!
-
     snprintf(s_health_text_one, sizeof(s_health_text_one), "%d", (int)health_service_sum_today(metric));
     text_layer_set_text(s_step_layer,  s_health_text_one );
   } else {
@@ -48,6 +47,16 @@ static void update_time() {
 
 static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
   update_time();
+}
+
+static int32_t get_angle_for_hour(int hour) {
+  // Progress through 12 hours, out of 360 degrees
+  return (hour * 360) / 12;
+}
+
+static int32_t get_angle_for_minute(int minute) {
+  // Progress through 60 minutes, out of 360 degrees
+  return (minute * 360) / 60;
 }
 
 static void canvas_update_proc(Layer *layer, GContext *ctx) {
@@ -63,29 +72,46 @@ static void canvas_update_proc(Layer *layer, GContext *ctx) {
   // Fill a circle
   graphics_fill_circle(ctx, center, radius);
   
-  //Radial circles
-  uint16_t small_circle_radius = 4; 
+   //Radial circles
+   uint16_t small_circle_radius = 3;
+   GRect frame = grect_inset(bounds, GEdgeInsets(3 * PBL_IF_ROUND_ELSE(5, 3)));
   
-  GPoint center1 = GPoint((bounds.size.w / 2) - 2, (bounds.size.h / 9.5) - 2);
-  graphics_context_set_fill_color(ctx, GColorLightGray);  
-  graphics_draw_circle(ctx, center1, small_circle_radius);
-  graphics_fill_circle(ctx, center1, small_circle_radius);
+  time_t temp = time(NULL); 
+  struct tm *tick_time = localtime(&temp);
   
-  GPoint center2 = GPoint((bounds.size.w / 9.5) - 2, (bounds.size.h / 2) - 2);
-  graphics_context_set_fill_color(ctx, GColorLightGray);  
-  graphics_draw_circle(ctx, center2, small_circle_radius);
-  graphics_fill_circle(ctx, center2, small_circle_radius);
+  int hour = tick_time->tm_hour;
+  if ( hour > 12 )
+    hour = hour - 12;
+  int minute = tick_time->tm_min;
+  int minute_to_less_five = 0;
+
+  if ( minute < 60 ) minute_to_less_five = 55;
+  if ( minute < 55 ) minute_to_less_five = 50;
+  if ( minute < 50 ) minute_to_less_five = 45;
+  if ( minute < 45 ) minute_to_less_five = 40;
+  if ( minute < 40 ) minute_to_less_five = 35;
+  if ( minute < 35 ) minute_to_less_five = 30;
+  if ( minute < 30 ) minute_to_less_five = 25;
+  if ( minute < 25 ) minute_to_less_five = 20;
+  if ( minute < 20 ) minute_to_less_five = 15;
+  if ( minute < 15 ) minute_to_less_five = 10;
+  if ( minute < 10 ) minute_to_less_five = 5;
+  if ( minute < 5 ) minute_to_less_five = 0;
   
-  GPoint center3 = GPoint((bounds.size.w / 2) - 2, (bounds.size.h * .90) + 2);
-  graphics_context_set_fill_color(ctx, GColorLightGray);  
-  graphics_draw_circle(ctx, center3, small_circle_radius);
-  graphics_fill_circle(ctx, center3, small_circle_radius);
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "minute minute minute minute: %d", minute);
+//   APP_LOG(APP_LOG_LEVEL_DEBUG, "minute minute minute minute: %d",   Math.Round(minute / 5.0) * 5);
+
+  int minute_angle = get_angle_for_minute(minute_to_less_five);
+     GPoint pos = gpoint_from_polar(frame, GOvalScaleModeFitCircle, DEG_TO_TRIGANGLE(minute_angle));
+     graphics_context_set_fill_color(ctx, GColorWhite);  
+     graphics_fill_circle(ctx, pos, 5);
   
-  GPoint center4 = GPoint((bounds.size.w * .90) + 2, (bounds.size.h / 2) - 2);
-  graphics_context_set_fill_color(ctx, GColorLightGray);  
-  graphics_draw_circle(ctx, center4, small_circle_radius);
-  graphics_fill_circle(ctx, center4, small_circle_radius);
-  
+   for (int i = 0; i < 12; i++) {
+     int hour_angle = get_angle_for_hour(i);
+     GPoint pos = gpoint_from_polar(frame, GOvalScaleModeFitCircle, DEG_TO_TRIGANGLE(hour_angle));
+     graphics_context_set_fill_color(ctx, i == hour ? GColorRed : GColorDarkGray);  
+     graphics_fill_circle(ctx, pos, i == hour ? 5 : small_circle_radius);
+  }
 }
 
 static void main_window_load(Window *window) {
