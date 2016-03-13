@@ -62,6 +62,30 @@ static void canvas_update_proc(Layer *layer, GContext *ctx) {
   
   // Fill a circle
   graphics_fill_circle(ctx, center, radius);
+  
+  //Radial circles
+  uint16_t small_circle_radius = 4; 
+  GPoint center1 = GPoint(bounds.size.w / 2, bounds.size.h / 9.5);
+
+  graphics_context_set_fill_color(ctx, GColorLightGray);  
+  graphics_draw_circle(ctx, center1, small_circle_radius);
+  graphics_fill_circle(ctx, center1, small_circle_radius);
+  
+  GPoint center2 = GPoint((bounds.size.w / 9.5) - 2, (bounds.size.h / 2) - 2);
+  graphics_context_set_fill_color(ctx, GColorLightGray);  
+  graphics_draw_circle(ctx, center2, small_circle_radius);
+  graphics_fill_circle(ctx, center2, small_circle_radius);
+  
+  GPoint center3 = GPoint((bounds.size.w / 2) - 2, bounds.size.h * .90);
+  graphics_context_set_fill_color(ctx, GColorLightGray);  
+  graphics_draw_circle(ctx, center3, small_circle_radius);
+  graphics_fill_circle(ctx, center3, small_circle_radius);
+  
+  GPoint center4 = GPoint((bounds.size.w * .90) - 2, (bounds.size.h / 2) - 2);
+  graphics_context_set_fill_color(ctx, GColorLightGray);  
+  graphics_draw_circle(ctx, center4, small_circle_radius);
+  graphics_fill_circle(ctx, center4, small_circle_radius);
+  
 }
 
 static void main_window_load(Window *window) {
