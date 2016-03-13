@@ -102,7 +102,8 @@ static void canvas_update_proc(Layer *layer, GContext *ctx) {
   int minute_angle = get_angle_for_minute(minute_to_less_five);
      GPoint pos = gpoint_from_polar(frame, GOvalScaleModeFitCircle, DEG_TO_TRIGANGLE(minute_angle));
      graphics_context_set_fill_color(ctx, GColorWhite);  
-     graphics_fill_circle(ctx, pos, 5);
+     graphics_fill_circle(ctx, pos, hour == minute_to_less_five/5 ? 6 : 5);
+  
   
    for (int i = 0; i < 12; i++) {
      int hour_angle = get_angle_for_hour(i);
@@ -130,7 +131,7 @@ static void main_window_load(Window *window) {
   s_date_layer = text_layer_create(GRect(0, PBL_IF_ROUND_ELSE(45, 90), bounds.size.w, 21));
   text_layer_set_text_color(s_date_layer, GColorBlack);
   text_layer_set_background_color(s_date_layer, GColorClear);
-    text_layer_set_font(s_date_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD ));
+  text_layer_set_font(s_date_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD ));
   text_layer_set_text_alignment(s_date_layer, GTextAlignmentCenter);
 
   // Add to Window
