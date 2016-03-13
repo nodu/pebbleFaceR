@@ -72,16 +72,15 @@ static void canvas_update_proc(Layer *layer, GContext *ctx) {
   // Fill a circle
   graphics_fill_circle(ctx, center, radius);
   
-   //Radial circles
-   uint16_t small_circle_radius = 3;
-   GRect frame = grect_inset(bounds, GEdgeInsets(3 * PBL_IF_ROUND_ELSE(5, 3)));
+  //Radial circles
+  uint16_t small_circle_radius = 3;
+  GRect frame = grect_inset(bounds, GEdgeInsets(3 * PBL_IF_ROUND_ELSE(5, 3)));
   
   time_t temp = time(NULL); 
   struct tm *tick_time = localtime(&temp);
   
   int hour = tick_time->tm_hour;
-  if ( hour > 12 )
-    hour = hour - 12;
+  if ( hour > 12 ) hour = hour - 12;
   int minute = tick_time->tm_min;
   int minute_to_less_five = 0;
 
@@ -98,8 +97,7 @@ static void canvas_update_proc(Layer *layer, GContext *ctx) {
   if ( minute < 10 ) minute_to_less_five = 5;
   if ( minute < 5 ) minute_to_less_five = 0;
   
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "minute minute minute minute: %d", minute);
-//   APP_LOG(APP_LOG_LEVEL_DEBUG, "minute minute minute minute: %d",   Math.Round(minute / 5.0) * 5);
+//   APP_LOG(APP_LOG_LEVEL_DEBUG, "minute minute minute minute: %d", minute);
 
   int minute_angle = get_angle_for_minute(minute_to_less_five);
      GPoint pos = gpoint_from_polar(frame, GOvalScaleModeFitCircle, DEG_TO_TRIGANGLE(minute_angle));
