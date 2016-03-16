@@ -81,6 +81,8 @@ static void canvas_update_proc(Layer *layer, GContext *ctx) {
   
   int hour = tick_time->tm_hour;
   if ( hour > 12 ) hour = hour - 12;
+  if (hour == 12) 
+    hour = 0;
   int minute = tick_time->tm_min;
   int minute_to_less_five = 0;
 
